@@ -73,16 +73,39 @@ pipeline{
                }
             }
         }
-        stage('JFrog: Artifacts'){
-         when { expression { params.action == 'create' } }
+        stage('Docker Image Build'){
+         when { expression {  params.action == 'create' } }
             steps{
                script{
-                curl -u admin:password -X POST "http://34.226.153.10:8081/l/ /var/lib/jenkins/workspace/targets/kubernetes-configmap-reload-0.0.1-SNAPSHOT.jar"
-                    }
-                  }
-                                }
-    
-       
+                   
+                   dockerBuild("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+               }
+            }
+        }
+         stage('Docker Image Scan: trivy '){
+         when { expression {  params.action == 'create' } }
+            steps{
+               script{
+                   
+                   dockerImageScan("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+               }
+            }
+        }
+        stage('Docker Image Push : DockerHub '){
+         when { expression {  params.action == 'create' } }
+            steps{
+               script{
+                   
+                   dockerImagePush("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+               }
+            }
+        }   
+        stage('Docker Image Cleanup : DockerHub '){
+         when { expression {  params.action == 'create' } }
+            steps{
+               script{
+                   
+                   dockerImageCleanup("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
                }
             }
         }      
