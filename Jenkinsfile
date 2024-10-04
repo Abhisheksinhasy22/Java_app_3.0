@@ -77,7 +77,7 @@ pipeline{
          when { expression { params.action == 'create' } }
             steps{
                script{
-                curl -u admin:password -X POST "http://34.226.153.10:8081/artifactory/api/copy/libs-release-local/path/to/artifact_xx_xxx.jar?to=/libs-snapshot-local/path/to/artifact_xx_xxx.jar"
+                curl -u admin:password -X POST "http://34.226.153.10:8081/l/ /var/lib/jenkins/workspace/targets/kubernetes-configmap-reload-0.0.1-SNAPSHOT.jar"
                     }
                   }
                                 }
